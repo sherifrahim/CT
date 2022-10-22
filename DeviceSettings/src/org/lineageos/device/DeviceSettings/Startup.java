@@ -33,10 +33,22 @@ public class Startup extends BroadcastReceiver {
     private static final String TAG = "BootReceiver";
     private static final String ONE_TIME_TUNABLE_RESTORE = "hardware_tunable_restored";
     
+    private boolean mHBM = false;
+
     @Override
     public void onReceive(final Context context, final Intent bootintent) {
 
         VibratorStrengthPreference.restore(context);
+        Utils.enableService(context);
+    }
+
+    private void restore(String file, boolean enabled) {
+        if (file == null) {
+            return;
+        }
+        if (enabled) {
+            Utils.writeValue(file, mHBM ? "5" : "1");
+        }
     }
 
     private void restore(String file, String value) {
